@@ -12,6 +12,7 @@ HEAD
 * Add safe bool idiom in `JsonString`
 * Remove `DeserializationError == bool` and `DeserializationError != bool`
 * Fix `JsonVariant::memoryUsage()` for raw strings
+* Support NUL in `JsonString`, `std::string`, and `std::string_view` (issue #1646)
 
 v6.18.5 (2021-09-28)
 -------

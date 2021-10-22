@@ -137,7 +137,7 @@ struct Converter<String> {
 
   static String fromJson(VariantConstRef src) {
     const VariantData* data = getData(src);
-    return data ? data->asString() : 0;
+    return data ? data->asString() : String();
   }
 
   static bool checkJson(VariantConstRef src) {
@@ -244,13 +244,13 @@ inline void convertToJson(const ::Printable& src, VariantRef dst) {
   if (!pool || !data)
     return;
   MemoryPoolPrint print(pool);
-  src.printTo(print);
+  size_t n = src.printTo(print);
   if (print.overflowed()) {
     pool->markAsOverflowed();
     data->setNull();
     return;
   }
-  data->setStringPointer(print.c_str(), storage_policies::store_by_copy());
+  data->setStringPointer(print.c_str(), n, storage_policies::store_by_copy());
 }
 
 #endif
@@ -279,7 +279,7 @@ inline void convertFromJson(VariantConstRef src, std::string& dst) {
   const VariantData* data = getData(src);
   String str = data != 0 ? data->asString() : String();
   if (str)
-    dst.assign(str.c_str());
+    dst.assign(str.c_str(), str.size());
   else
     serializeJson(src, dst);
 }
@@ -294,9 +294,9 @@ inline bool canConvertFromJson(VariantConstRef src, const std::string&) {
 #if ARDUINOJSON_ENABLE_STRING_VIEW
 
 inline void convertFromJson(VariantConstRef src, std::string_view& dst) {
-  const char* str = src.as<const char*>();
+  String str = src.as<String>();
   if (str)  // the standard doesn't allow passing null to the constructor
-    dst = std::string_view(str);
+    dst = std::string_view(str.c_str(), str.size());
 }
 
 inline bool canConvertFromJson(VariantConstRef src, const std::string_view&) {

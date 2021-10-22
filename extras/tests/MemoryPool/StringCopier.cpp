@@ -37,7 +37,7 @@ TEST_CASE("StringCopier") {
     StringCopier str(pool);
 
     str.startString();
-    str.append('h');
+    str.append('\0');
     str.save();
 
     REQUIRE(1 == pool.size());
