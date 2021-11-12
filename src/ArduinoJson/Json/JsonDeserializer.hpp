@@ -346,7 +346,7 @@ class JsonDeserializer {
     if (!parseQuotedString())
       return false;
     const char *value = _stringStorage.save();
-    variant.setStringPointer(value, _stringStorage.size() - 1,
+    variant.setStringPointer(value, _stringStorage.size(),
                              typename TStringStorage::storage_policy());
     return true;
   }
@@ -403,8 +403,6 @@ class JsonDeserializer {
       _stringStorage.append(c);
     }
 
-    _stringStorage.append('\0');
-
     if (!_stringStorage.isValid()) {
       _error = DeserializationError::NoMemory;
       return false;
@@ -427,8 +425,6 @@ class JsonDeserializer {
       _error = DeserializationError::InvalidInput;
       return false;
     }
-
-    _stringStorage.append('\0');
 
     if (!_stringStorage.isValid()) {
       _error = DeserializationError::NoMemory;

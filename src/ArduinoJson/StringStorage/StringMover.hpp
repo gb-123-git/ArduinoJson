@@ -18,6 +18,7 @@ class StringMover {
   }
 
   const char* save() const {
+    _writePtr[0] = 0;  // terminator
     return _startPtr;
   }
 
@@ -30,6 +31,7 @@ class StringMover {
   }
 
   const char* c_str() const {
+    _writePtr[0] = 0;  // terminator
     return _startPtr;
   }
 

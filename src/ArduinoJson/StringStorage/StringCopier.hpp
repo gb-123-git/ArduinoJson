@@ -15,10 +15,12 @@ class StringCopier {
   void startString() {
     _pool->getFreeZone(&_ptr, &_capacity);
     _size = 0;
+    ARDUINOJSON_ASSERT(_capacity > 0);
   }
 
   const char* save() {
     ARDUINOJSON_ASSERT(_ptr);
+    _ptr[_size] = 0;
     return _pool->saveStringFromFreeZone(_size);
   }
 
@@ -34,13 +36,12 @@ class StringCopier {
     if (!_ptr)
       return;
 
+    _ptr[_size++] = c;
+
     if (_size >= _capacity) {
       _ptr = 0;
       _pool->markAsOverflowed();
-      return;
     }
-
-    _ptr[_size++] = c;
   }
 
   bool isValid() const {
@@ -48,6 +49,7 @@ class StringCopier {
   }
 
   const char* c_str() const {
+    _ptr[_size] = 0;
     return _ptr;
   }
 
