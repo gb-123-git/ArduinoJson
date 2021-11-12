@@ -231,7 +231,7 @@ class JsonDeserializer {
         return false;
       }
 
-      const char *key = _stringStorage.c_str();
+      String key = _stringStorage.str();
 
       TFilter memberFilter = filter[key];
 
@@ -249,7 +249,7 @@ class JsonDeserializer {
             return false;
           }
 
-          slot->setKey(key, typename TStringStorage::storage_policy());
+          slot->setKey(key.c_str(), typename TStringStorage::storage_policy());
 
           variant = slot->data();
         }
@@ -345,8 +345,8 @@ class JsonDeserializer {
     _stringStorage.startString();
     if (!parseQuotedString())
       return false;
-    const char *value = _stringStorage.save();
-    variant.setStringPointer(value, _stringStorage.size(),
+    String value = _stringStorage.save();
+    variant.setStringPointer(value.c_str(), value.size(),
                              typename TStringStorage::storage_policy());
     return true;
   }

@@ -18,10 +18,9 @@ class StringCopier {
     ARDUINOJSON_ASSERT(_capacity > 0);
   }
 
-  const char* save() {
+  String save() {
     ARDUINOJSON_ASSERT(_ptr);
-    _ptr[_size] = 0;
-    return _pool->saveStringFromFreeZone(_size);
+    return String(_pool->saveStringFromFreeZone(_size), _size, false);
   }
 
   void append(const char* s) {
@@ -55,6 +54,10 @@ class StringCopier {
 
   size_t size() const {
     return _size;
+  }
+
+  String str() const {
+    return String(c_str(), size(), false);  // TODO: test without terminator
   }
 
   typedef storage_policies::store_by_copy storage_policy;

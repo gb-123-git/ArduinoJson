@@ -17,9 +17,10 @@ class StringMover {
     _startPtr = _writePtr;
   }
 
-  const char* save() const {
-    _writePtr[0] = 0;  // terminator
-    return _startPtr;
+  String save() {
+    String s = str();
+    _writePtr++;
+    return s;
   }
 
   void append(char c) {
@@ -28,6 +29,10 @@ class StringMover {
 
   bool isValid() const {
     return true;
+  }
+
+  String str() const {
+    return String(c_str(), size(), true);  // TODO: test without terminator
   }
 
   const char* c_str() const {

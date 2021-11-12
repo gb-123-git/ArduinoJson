@@ -94,7 +94,8 @@ class MemoryPool {
 #endif
 
     const char* str = _left;
-    _left += len + 1;  // include NUL terminator
+    _left += len;
+    *_left++ = 0;
     checkInvariants();
     return str;
   }
