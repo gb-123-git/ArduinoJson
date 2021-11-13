@@ -6,6 +6,7 @@
 
 #include <ArduinoJson/Namespace.hpp>
 #include <ArduinoJson/Polyfills/assert.hpp>
+#include <ArduinoJson/Polyfills/attributes.hpp>>
 
 #include <stddef.h>  // size_t
 

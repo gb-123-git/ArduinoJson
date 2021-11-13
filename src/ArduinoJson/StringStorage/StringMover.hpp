@@ -17,7 +17,7 @@ class StringMover {
     _startPtr = _writePtr;
   }
 
-  String save() {
+  FORCE_INLINE String save() {
     String s = str();
     _writePtr++;
     return s;

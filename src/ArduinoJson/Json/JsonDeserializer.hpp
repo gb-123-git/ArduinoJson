@@ -236,7 +236,7 @@ class JsonDeserializer {
       TFilter memberFilter = filter[key];
 
       if (memberFilter.allow()) {
-        VariantData *variant = object.getMember(adaptString(key));
+        VariantData *variant = object.getMember(adaptString(key.c_str()));
         if (!variant) {
           // Save key in memory pool.
           // This MUST be done before adding the slot.
