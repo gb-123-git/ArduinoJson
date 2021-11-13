@@ -331,8 +331,7 @@ class MsgPackDeserializer {
   bool readString(VariantData *variant, size_t n) {
     if (!readString(n))
       return false;
-    variant->setStringPointer(_stringStorage.save(), _stringStorage.size() - 1,
-                              typename TStringStorage::storage_policy());
+    variant->setStringPointer(_stringStorage.save());
     return true;
   }
 

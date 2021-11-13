@@ -228,22 +228,14 @@ class VariantData {
     setType(VALUE_IS_NULL);
   }
 
-  // TODO: why not use a JsonString for both functions?
-  void setStringPointer(const char *s, size_t n,
-                        storage_policies::store_by_copy) {
-    ARDUINOJSON_ASSERT(s != 0);
-    setType(VALUE_IS_OWNED_STRING);
-    _content.asString.data = s;
-    _content.asString.size = n;
-  }
-
-  // TODO: why not use a JsonString for both functions?
-  void setStringPointer(const char *s, size_t n,
-                        storage_policies::store_by_address) {
-    ARDUINOJSON_ASSERT(s != 0);
-    setType(VALUE_IS_LINKED_STRING);
-    _content.asString.data = s;
-    _content.asString.size = n;
+  void setStringPointer(String s) {
+    ARDUINOJSON_ASSERT(s);
+    if (s.isStatic())
+      setType(VALUE_IS_LINKED_STRING);
+    else
+      setType(VALUE_IS_OWNED_STRING);
+    _content.asString.data = s.c_str();
+    _content.asString.size = s.size();
   }
 
   template <typename TAdaptedString>
@@ -352,8 +344,7 @@ class VariantData {
     if (value.isNull())
       setNull();
     else
-      setStringPointer(value.data(), value.size(),
-                       storage_policies::store_by_address());
+      setStringPointer(String(value.data(), value.size(), true));
     return true;
   }
 
@@ -369,7 +360,7 @@ class VariantData {
       setNull();
       return false;
     }
-    setStringPointer(copy, value.size(), storage_policies::store_by_copy());
+    setStringPointer(String(copy, value.size(), false));
     return true;
   }
 };

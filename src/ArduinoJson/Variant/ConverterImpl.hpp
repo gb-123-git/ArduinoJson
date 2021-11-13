@@ -250,7 +250,7 @@ inline void convertToJson(const ::Printable& src, VariantRef dst) {
     data->setNull();
     return;
   }
-  data->setStringPointer(print.c_str(), n, storage_policies::store_by_copy());
+  data->setStringPointer(String(print.c_str(), n));
 }
 
 #endif
