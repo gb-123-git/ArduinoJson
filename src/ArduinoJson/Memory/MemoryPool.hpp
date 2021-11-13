@@ -87,7 +87,6 @@ class MemoryPool {
 
   const char* saveStringFromFreeZone(size_t len) {
 #if ARDUINOJSON_ENABLE_STRING_DEDUPLICATION
-    ARDUINOJSON_ASSERT(_left + len + 1 < _right);
     const char* dup = findString(adaptString(_left, len));
     if (dup)
       return dup;
