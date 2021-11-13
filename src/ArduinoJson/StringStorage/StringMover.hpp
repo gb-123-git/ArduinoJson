@@ -18,6 +18,7 @@ class StringMover {
   }
 
   FORCE_INLINE String save() {
+    _writePtr[0] = 0;  // terminator
     String s = str();
     _writePtr++;
     return s;
@@ -32,7 +33,7 @@ class StringMover {
   }
 
   String str() const {
-    return String(c_str(), size(), true);  // TODO: test without terminator
+    return String(_startPtr, size(), true);
   }
 
   const char* c_str() const {
