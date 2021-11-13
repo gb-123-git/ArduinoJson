@@ -15,7 +15,6 @@ class StringCopier {
   void startString() {
     _pool->getFreeZone(&_ptr, &_capacity);
     _size = 0;
-    ARDUINOJSON_ASSERT(_capacity > 0);
   }
 
   String save() {

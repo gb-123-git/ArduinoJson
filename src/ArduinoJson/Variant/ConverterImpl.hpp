@@ -204,7 +204,6 @@ class MemoryPoolPrint : public Print {
   }
 
   const char* c_str() {
-    _string[_size++] = 0;
     ARDUINOJSON_ASSERT(_size <= _capacity);
     return _pool->saveStringFromFreeZone(_size);
   }
