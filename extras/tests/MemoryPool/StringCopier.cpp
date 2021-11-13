@@ -37,7 +37,6 @@ TEST_CASE("StringCopier") {
     StringCopier str(pool);
 
     str.startString();
-    str.append('\0');
     str.save();
 
     REQUIRE(1 == pool.size());
@@ -48,8 +47,7 @@ static const char* addStringToPool(MemoryPool& pool, const char* s) {
   StringCopier str(pool);
   str.startString();
   str.append(s);
-  str.append('\0');
-  return str.save();
+  return str.save().c_str();
 }
 
 TEST_CASE("StringCopier::save() deduplicates strings") {
