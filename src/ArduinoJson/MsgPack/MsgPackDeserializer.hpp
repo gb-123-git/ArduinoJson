@@ -418,7 +418,7 @@ class MsgPackDeserializer {
       if (!readKey())
         return false;
 
-      const char *key = _stringStorage.c_str();
+      String key = _stringStorage.str();
       TFilter memberFilter = filter[key];
       VariantData *member;
 
@@ -433,7 +433,7 @@ class MsgPackDeserializer {
           return false;
         }
 
-        slot->setKey(key, typename TStringStorage::storage_policy());
+        slot->setKey(key);
 
         member = slot->data();
       } else {

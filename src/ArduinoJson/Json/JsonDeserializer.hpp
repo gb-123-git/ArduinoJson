@@ -249,7 +249,7 @@ class JsonDeserializer {
             return false;
           }
 
-          slot->setKey(key.c_str(), typename TStringStorage::storage_policy());
+          slot->setKey(key);
 
           variant = slot->data();
         }
