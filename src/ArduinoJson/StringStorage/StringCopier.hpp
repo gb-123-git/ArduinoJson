@@ -53,8 +53,6 @@ class StringCopier {
     return String(_ptr, _size, false);  // TODO: test without terminator
   }
 
-  typedef storage_policies::store_by_copy storage_policy;
-
  private:
   MemoryPool* _pool;
 
