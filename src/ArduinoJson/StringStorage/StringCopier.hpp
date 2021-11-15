@@ -15,6 +15,8 @@ class StringCopier {
   void startString() {
     _pool->getFreeZone(&_ptr, &_capacity);
     _size = 0;
+    if (_capacity == 0)
+      _pool->markAsOverflowed();
   }
 
   String save() {
@@ -32,14 +34,14 @@ class StringCopier {
   }
 
   void append(char c) {
-    _ptr[_size++] = c;
-
-    if (_size >= _capacity)
+    if (_size + 1 < _capacity)
+      _ptr[_size++] = c;
+    else
       _pool->markAsOverflowed();
   }
 
   bool isValid() const {
-    return _size < _capacity;
+    return !_pool->overflowed();
   }
 
   size_t size() const {
