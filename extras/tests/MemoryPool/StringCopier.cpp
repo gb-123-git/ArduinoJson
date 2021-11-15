@@ -16,7 +16,6 @@ TEST_CASE("StringCopier") {
 
     str.startString();
     str.append("hello");
-    str.append('\0');
 
     REQUIRE(str.isValid() == true);
     REQUIRE(str.c_str() == std::string("hello"));
@@ -40,6 +39,14 @@ TEST_CASE("StringCopier") {
     str.save();
 
     REQUIRE(1 == pool.size());
+  }
+
+  SECTION("Works when memory pool is full") {
+    MemoryPool pool(buffer, 0);
+    StringCopier str(pool);
+
+    str.startString();
+    REQUIRE(str.isValid() == false);
   }
 }
 
