@@ -42,19 +42,15 @@ class StringCopier {
     return _size < _capacity;
   }
 
-  const char* c_str() const {  // TODO: inline?
-    ARDUINOJSON_ASSERT(_ptr);
-    ARDUINOJSON_ASSERT(_size < _capacity);
-    _ptr[_size] = 0;
-    return _ptr;
-  }
-
   size_t size() const {
     return _size;
   }
 
   String str() const {
-    return String(c_str(), size(), false);  // TODO: test without terminator
+    ARDUINOJSON_ASSERT(_ptr);
+    ARDUINOJSON_ASSERT(_size < _capacity);
+    _ptr[_size] = 0;
+    return String(_ptr, _size, false);  // TODO: test without terminator
   }
 
   typedef storage_policies::store_by_copy storage_policy;

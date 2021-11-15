@@ -9,7 +9,7 @@
 
 using namespace ARDUINOJSON_NAMESPACE;
 
-static void testCodepoint(uint32_t codepoint, std::string expected) {
+static void testCodepoint(uint32_t codepoint, const char* expected) {
   char buffer[4096];
   MemoryPool pool(buffer, 4096);
   StringCopier str(pool);
@@ -19,7 +19,7 @@ static void testCodepoint(uint32_t codepoint, std::string expected) {
   Utf8::encodeCodepoint(codepoint, str);
 
   str.append('\0');
-  REQUIRE(str.c_str() == expected);
+  REQUIRE(str.str() == expected);
 }
 
 TEST_CASE("Utf8::encodeCodepoint()") {

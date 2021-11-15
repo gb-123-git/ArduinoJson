@@ -36,11 +36,6 @@ class StringMover {
     return String(_startPtr, size(), true);
   }
 
-  const char* c_str() const {
-    _writePtr[0] = 0;  // terminator
-    return _startPtr;
-  }
-
   size_t size() const {
     return size_t(_writePtr - _startPtr);
   }

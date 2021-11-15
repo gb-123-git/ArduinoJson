@@ -18,7 +18,7 @@ TEST_CASE("StringCopier") {
     str.append("hello");
 
     REQUIRE(str.isValid() == true);
-    REQUIRE(str.c_str() == std::string("hello"));
+    REQUIRE(str.str() == "hello");
   }
 
   SECTION("Returns null when too small") {
