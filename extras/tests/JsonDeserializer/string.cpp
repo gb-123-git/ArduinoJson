@@ -114,7 +114,9 @@ TEST_CASE("Not enough room to save the key") {
 }
 
 TEST_CASE("Empty memory pool") {
+  // NOLINTNEXTLINE(clang-analyzer-optin.portability.UnixAPI)
   DynamicJsonDocument doc(0);
+
   SECTION("Input is const char*") {
     REQUIRE(deserializeJson(doc, "\"hello\"") ==
             DeserializationError::NoMemory);
