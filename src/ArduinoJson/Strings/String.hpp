@@ -67,7 +67,7 @@ class String : public SafeBoolIdom<String> {
 
 #if ARDUINOJSON_ENABLE_STD_STREAM
   friend std::ostream& operator<<(std::ostream& lhs, const String& rhs) {
-    lhs.write(rhs.c_str(), rhs.size());
+    lhs.write(rhs.c_str(), static_cast<std::streamsize>(rhs.size()));
     return lhs;
   }
 #endif
