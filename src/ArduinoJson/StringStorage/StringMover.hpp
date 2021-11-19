@@ -32,7 +32,7 @@ class StringMover {
   }
 
   String str() const {
-    return String(_startPtr, true);
+    return String(_startPtr, size(), true);
   }
 
   size_t size() const {
