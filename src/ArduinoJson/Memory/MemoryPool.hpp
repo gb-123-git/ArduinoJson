@@ -87,13 +87,14 @@ class MemoryPool {
 
   const char* saveStringFromFreeZone(size_t len) {
 #if ARDUINOJSON_ENABLE_STRING_DEDUPLICATION
-    const char* dup = findString(adaptString(_left));
+    const char* dup = findString(adaptString(_left, len));
     if (dup)
       return dup;
 #endif
 
     const char* str = _left;
     _left += len;
+    *_left++ = 0;
     checkInvariants();
     return str;
   }
@@ -165,9 +166,21 @@ class MemoryPool {
 
 #if ARDUINOJSON_ENABLE_STRING_DEDUPLICATION
   template <typename TAdaptedString>
-  const char* findString(const TAdaptedString& str) {
-    for (char* next = _begin; next < _left; ++next) {
-      if (str.compare(next) == 0)
+  static bool stringEquals(const char* p, size_t n, const TAdaptedString& s) {
+    if (p[n])  // check terminator first
+      return false;
+    for (size_t i = 0; i < n; i++) {
+      if (p[i] != s[i])
+        return false;
+    }
+    return true;
+  }
+
+  template <typename TAdaptedString>
+  const char* findString(const TAdaptedString& str) const {
+    size_t n = str.size();
+    for (char* next = _begin; next + n < _left; ++next) {
+      if (stringEquals(next, n, str))
         return next;
 
       // jump to next terminator

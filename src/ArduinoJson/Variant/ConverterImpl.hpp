@@ -203,10 +203,9 @@ class MemoryPoolPrint : public Print {
     pool->getFreeZone(&_string, &_capacity);
   }
 
-  const char* c_str() {
-    _string[_size++] = 0;
-    ARDUINOJSON_ASSERT(_size <= _capacity);
-    return _pool->saveStringFromFreeZone(_size);
+  String str() {
+    ARDUINOJSON_ASSERT(_size < _capacity);
+    return String(_pool->saveStringFromFreeZone(_size), false);
   }
 
   size_t write(uint8_t c) {
@@ -244,13 +243,13 @@ inline void convertToJson(const ::Printable& src, VariantRef dst) {
   if (!pool || !data)
     return;
   MemoryPoolPrint print(pool);
-  src.printTo(print);
+  size_t n = src.printTo(print);
   if (print.overflowed()) {
     pool->markAsOverflowed();
     data->setNull();
     return;
   }
-  data->setStringPointer(print.c_str(), storage_policies::store_by_copy());
+  data->setString(print.str());
 }
 
 #endif

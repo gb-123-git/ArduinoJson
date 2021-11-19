@@ -77,16 +77,13 @@ class VariantSlot {
     _next = VariantSlotDiff(slot - this);
   }
 
-  void setKey(const char* k, storage_policies::store_by_copy) {
-    ARDUINOJSON_ASSERT(k != NULL);
-    _flags |= OWNED_KEY_BIT;
-    _key = k;
-  }
-
-  void setKey(const char* k, storage_policies::store_by_address) {
-    ARDUINOJSON_ASSERT(k != NULL);
-    _flags &= VALUE_MASK;
-    _key = k;
+  void setKey(String k) {
+    ARDUINOJSON_ASSERT(k);
+    if (k.isStatic())
+      _flags &= VALUE_MASK;
+    else
+      _flags |= OWNED_KEY_BIT;
+    _key = k.c_str();
   }
 
   const char* key() const {

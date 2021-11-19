@@ -104,8 +104,8 @@ class VariantData {
       case VALUE_IS_OBJECT:
         return toObject().copyFrom(src._content.asCollection, pool);
       case VALUE_IS_OWNED_STRING:
-        return setString(adaptString(const_cast<char *>(src._content.asString)),
-                         pool);
+        return storeString(
+            adaptString(const_cast<char *>(src._content.asString)), pool);
       case VALUE_IS_OWNED_RAW:
         return setOwnedRaw(
             serialized(src._content.asRaw.data, src._content.asRaw.size), pool);
@@ -223,20 +223,17 @@ class VariantData {
     setType(VALUE_IS_NULL);
   }
 
-  void setStringPointer(const char *s, storage_policies::store_by_copy) {
-    ARDUINOJSON_ASSERT(s != 0);
-    setType(VALUE_IS_OWNED_STRING);
-    _content.asString = s;
-  }
-
-  void setStringPointer(const char *s, storage_policies::store_by_address) {
-    ARDUINOJSON_ASSERT(s != 0);
-    setType(VALUE_IS_LINKED_STRING);
-    _content.asString = s;
+  void setString(String s) {
+    ARDUINOJSON_ASSERT(s);
+    if (s.isStatic())
+      setType(VALUE_IS_LINKED_STRING);
+    else
+      setType(VALUE_IS_OWNED_STRING);
+    _content.asString = s.c_str();
   }
 
   template <typename TAdaptedString>
-  bool setString(TAdaptedString value, MemoryPool *pool) {
+  bool storeString(TAdaptedString value, MemoryPool *pool) {
     return storeString(value, pool, typename TAdaptedString::storage_policy());
   }
 
@@ -342,7 +339,7 @@ class VariantData {
     if (value.isNull())
       setNull();
     else
-      setStringPointer(value.data(), storage_policies::store_by_address());
+      setString(String(value.data(), true));
     return true;
   }
 
@@ -358,7 +355,7 @@ class VariantData {
       setNull();
       return false;
     }
-    setStringPointer(copy, storage_policies::store_by_copy());
+    setString(String(copy, false));
     return true;
   }
 };
